@@ -277,18 +277,10 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'rest_framework',
-    'watchman',
     'registration',
 )
 
 # THIRD-PARTY CONFIGURATION
-
-# watchman
-# Disable Storage checking, to avoid creating files on S3 on every health check
-WATCHMAN_CHECKS = (
-    'watchman.checks.caches',
-    'watchman.checks.databases',
-)
 
 # rest_framework
 REST_FRAMEWORK = {
