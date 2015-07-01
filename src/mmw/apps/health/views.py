@@ -9,9 +9,12 @@ from django.http import JsonResponse
 from django.core.cache import caches
 from django.db import connections
 
+from mmw.middleware import bypass_middleware
+
 import uuid
 
 
+@bypass_middleware
 def health_check(request):
     response = {}
 
