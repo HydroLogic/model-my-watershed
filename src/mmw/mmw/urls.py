@@ -15,14 +15,14 @@ import apps.home.urls
 import apps.home.views
 import apps.water_balance.urls
 import apps.user.urls
-import apps.health.urls
+import apps.monitoring.urls
 
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
     url(r'^', include(apps.home.urls)),
-    url(r'^health-check/', include(apps.health.urls)),
+    url(r'^health-check/', include(apps.monitoring.urls)),
     url(r'^api-auth/', include(rest_framework.urls,
                                namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from __future__ import division
 
 from django.conf.urls import patterns, url
-from apps.health.views import health_check
+from apps.monitoring.views import health_check
 
 urlpatterns = patterns(
     '',
