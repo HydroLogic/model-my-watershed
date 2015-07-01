@@ -452,42 +452,47 @@ class DataPlane(StackNode):
         ))
 
     def create_elasticache_cloudwatch_alarms(self, elasticache_cache_cluster):
-        self.add_resource(cloudwatch.Alarm(
-            'alarmCacheClusterCPUUtilization',
-            AlarmDescription='Cache cluster CPU utilization',
-            AlarmActions=[Ref(self.notification_topic_arn)],
-            Statistic='Average',
-            Period=300,
-            Threshold='75',
-            EvaluationPeriods=1,
-            ComparisonOperator='GreaterThanThreshold',
-            MetricName='CPUUtilization',
-            Namespace='AWS/ElastiCache',
-            Dimensions=[
-                cloudwatch.MetricDimension(
-                    'metricCacheClusterName',
-                    Name='CacheClusterId',
-                    Value=Ref(elasticache_cache_cluster)
+        for index in [1, 2]:
+            self.add_resource(cloudwatch.Alarm(
+                'alarmCacheCluster{0:0>3}CPUUtilization'.format(index),
+                AlarmDescription='Cache cluster CPU utilization',
+                AlarmActions=[Ref(self.notification_topic_arn)],
+                Statistic='Average',
+                Period=300,
+                Threshold='75',
+                EvaluationPeriods=1,
+                ComparisonOperator='GreaterThanThreshold',
+                MetricName='CPUUtilization',
+                Namespace='AWS/ElastiCache',
+                Dimensions=[
+                    cloudwatch.MetricDimension(
+                        'metricCacheClusterName',
+                        Name='CacheClusterId',
+                        Value=Join('-',
+                                   [Ref(elasticache_cache_cluster),
+                                    '{0:0>3}'.format(index)])
                     )
                 ],
             ))
 
-        self.add_resource(cloudwatch.Alarm(
-            'alarmCacheClusterFreeableMemory',
-            AlarmDescription='Cache cluster freeable memory',
-            AlarmActions=[Ref(self.notification_topic_arn)],
-            Statistic='Average',
-            Period=60,
-            Threshold=str(int(5e+06)),  # 5MB in bytes
-            EvaluationPeriods=1,
-            ComparisonOperator='LessThanThreshold',
-            MetricName='FreeableMemory',
-            Namespace='AWS/ElastiCache',
-            Dimensions=[
-                cloudwatch.MetricDimension(
-                    'metricCacheClusterName',
-                    Name='CacheClusterId',
-                    Value=Ref(elasticache_cache_cluster)
+            self.add_resource(cloudwatch.Alarm(
+                'alarmCacheCluster{0:0>3}FreeableMemory'.format(index),
+                AlarmDescription='Cache cluster freeable memory',
+                AlarmActions=[Ref(self.notification_topic_arn)],
+                Statistic='Average',
+                Period=60,
+                Threshold=str(int(5e+06)),  # 5MB in bytes
+                EvaluationPeriods=1,
+                ComparisonOperator='LessThanThreshold',
+                MetricName='FreeableMemory',
+                Namespace='AWS/ElastiCache',
+                Dimensions=[
+                    cloudwatch.MetricDimension(
+                        'metricCacheClusterName',
+                        Name='CacheClusterId',
+                        Value=Join('-',
+                                   [Ref(elasticache_cache_cluster),
+                                    '{0:0>3}'.format(index)])
                     )
                 ],
             ))
